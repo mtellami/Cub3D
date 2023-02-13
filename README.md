@@ -1,2 +1,5 @@
 # Cub3D
-This project is inspired by the world-famous Wolfenstein 3D game, which was the first FPS ever.
+This project’s objectives are similar to all this first year’s objectives: Rigor, use of C, use
+of basic algorithms, information research etc.
+As a graphic design project, cub3D will enable you to improve your skills in these
+areas: windows, colors, events, fill shapes, etc.
