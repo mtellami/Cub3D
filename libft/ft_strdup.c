@@ -1,35 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read_map.c                                         :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mtellami <mtellami@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/13 15:57:14 by mtellami          #+#    #+#             */
-/*   Updated: 2023/02/13 18:12:32 by mtellami         ###   ########.fr       */
+/*   Created: 2023/02/13 16:20:18 by mtellami          #+#    #+#             */
+/*   Updated: 2023/02/13 16:23:04 by mtellami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-char	**read_map(char *path)
+char	*ft_strdup(char *str)
 {
-	char	**map;
-	char	*buffer;
-	int		fd;
+	char	*dup;
+	int		i;
 
-	fd = open(path, O_RDONLY);
-	if (fd == -1)
-		ft_errors("Error: can't open the map");
-	map = NULL;
-	while (1)
-	{
-		buffer = get_next_line(fd);
-		if (!buffer)
-			break ;
-		map = ft_concate(map, buffer);
-		free(buffer);
-	}
-	close(fd);
-	return (map);
+	dup = malloc(sizeof(char) * (ft_strlen(str) + 1));
+	if (!dup)
+		ft_errors("Error: can't allocate region");
+	i = -1;
+	while (str[++i])
+		dup[i] = str[i];
+	dup[i] = '\0';
+	return (dup);
 }

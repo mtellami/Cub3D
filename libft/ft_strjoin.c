@@ -1,35 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read_map.c                                         :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mtellami <mtellami@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/13 15:57:14 by mtellami          #+#    #+#             */
-/*   Updated: 2023/02/13 18:12:32 by mtellami         ###   ########.fr       */
+/*   Created: 2023/02/13 16:32:49 by mtellami          #+#    #+#             */
+/*   Updated: 2023/02/13 16:34:53 by mtellami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-char	**read_map(char *path)
+char	*ft_strjoin(char *s1, char *s2)
 {
-	char	**map;
-	char	*buffer;
-	int		fd;
+	char	*str;
+	int		i;
 
-	fd = open(path, O_RDONLY);
-	if (fd == -1)
-		ft_errors("Error: can't open the map");
-	map = NULL;
-	while (1)
-	{
-		buffer = get_next_line(fd);
-		if (!buffer)
-			break ;
-		map = ft_concate(map, buffer);
-		free(buffer);
-	}
-	close(fd);
-	return (map);
+	if (!s1 || !s2)
+		return (0);
+	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!str)
+		ft_errors(MALLOC_ERR);
+	i = 0;
+	while (*s1)
+		str[i++] = *s1++;
+	while (*s2)
+		str[i++] = *s2++;
+	str[i] = '\0';
+	return (str);
 }

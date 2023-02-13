@@ -1,35 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read_map.c                                         :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mtellami <mtellami@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/13 15:57:14 by mtellami          #+#    #+#             */
-/*   Updated: 2023/02/13 18:12:32 by mtellami         ###   ########.fr       */
+/*   Created: 2023/02/13 16:41:56 by mtellami          #+#    #+#             */
+/*   Updated: 2023/02/13 16:46:06 by mtellami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-char	**read_map(char *path)
+char	*ft_strchr(char *str, int c)
 {
-	char	**map;
-	char	*buffer;
-	int		fd;
-
-	fd = open(path, O_RDONLY);
-	if (fd == -1)
-		ft_errors("Error: can't open the map");
-	map = NULL;
-	while (1)
+	if (!str)
+		return (0);
+	while (*str)
 	{
-		buffer = get_next_line(fd);
-		if (!buffer)
-			break ;
-		map = ft_concate(map, buffer);
-		free(buffer);
+		if (*str == c)
+			return ((char *)str);
+		str++;
 	}
-	close(fd);
-	return (map);
+	if (!c)
+		return ((char *)str);
+	return (0);
 }
