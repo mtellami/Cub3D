@@ -6,11 +6,11 @@
 /*   By: mtellami <mtellami@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 20:49:01 by mtellami          #+#    #+#             */
-/*   Updated: 2023/03/09 21:40:51 by mtellami         ###   ########.fr       */
+/*   Updated: 2023/03/13 22:46:28 by mtellami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "leet3d.h"
 
 double	_angle(double angle)
 {

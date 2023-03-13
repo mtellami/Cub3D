@@ -6,86 +6,84 @@
 /*   By: mtellami <mtellami@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 01:37:34 by mtellami          #+#    #+#             */
-/*   Updated: 2023/03/09 21:09:00 by mtellami         ###   ########.fr       */
+/*   Updated: 2023/03/13 23:01:41 by mtellami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "leet3d.h"
 
-double	horizontal_distance(t_main *main, t_vector horizontal_hit)
+void	set_horizontal_hit(t_leet *leet, t_ray *ray,
+	t_vector hit, double distance)
 {
-	double	horz_hit_distance;
+	double	div;
 
-	if (horizontal_hit.x != -1 && horizontal_hit.y != -1)
-		horz_hit_distance = distance(main->player.vector, horizontal_hit);
-	else
-		horz_hit_distance = INT_MAX;
-	return (horz_hit_distance);
+	div = 0;
+	ray->wall_hit = hit;
+	ray->distance = distance;
+	ray->hit_side = HORIZONTAL_HIT;
+	if (_direction(ray->angle, FACING_UP))
+		div = -1;
+	ray->hit_content = map_has_wall_at(leet->ray.map.map,
+			ray->wall_hit.x, ray->wall_hit.y + div);
 }
 
-double	vertical_distance(t_main *main, t_vector vertical_hit)
+void	set_vertical_hit(t_leet *leet, t_ray *ray,
+	t_vector hit, double distance)
 {
-	double	vert_hit_distance;
+	double	div;
 
-	if (vertical_hit.x != -1 && vertical_hit.y != -1)
-		vert_hit_distance = _distance(main->player.vector, vertical_hit);
-	else
-		vert_hit_distance = INT_MAX;
-	return (vert_hit_distance);
+	div = 0;
+	ray->wall_hit = hit;
+	ray->distance = distance;
+	ray->hit_side = VERTICAL_HIT;
+	if (_direction(ray->angle, FACING_LEFT))
+		div = -1;
+	ray->hit_content = map_has_wall_at(leet->ray.map.map,
+			ray->wall_hit.x + div, ray->wall_hit.y);
 }
 
-void	setup_ray(t_main *main, t_ray *ray,
-t_vector horizontal_hit, t_vector vertical_hit)
+void	setup_ray(t_leet *leet, t_ray *ray,
+	t_vector horizontal_hit, t_vector vertical_hit)
 {
 	double	horz_hit_distance;
 	double	vert_hit_distance;
 
-	horz_hit_distance = horizontal_distance(main, horizontal_hit);
-	vert_hit_distance = vertical_distance(main, vertical_hit);
+	horz_hit_distance = _distance(leet->ray.player.vector, horizontal_hit);
+	vert_hit_distance = _distance(leet->ray.player.vector, vertical_hit);
 	if (vert_hit_distance < horz_hit_distance)
-	{
-		ray->x_wall_hit = vertical_hit.x;
-		ray->y_wall_hit = vertical_hit.y;
-		ray->distance = vert_hit_distance;
-		ray->hit_side = VERTICAL_HIT;
-	}
+		set_vertical_hit(leet, ray, vertical_hit, vert_hit_distance);
 	else
-	{
-		ray->x_wall_hit = horizontal_hit.x;
-		ray->y_wall_hit = horizontal_hit.y;
-		ray->distance = horz_hit_distance;
-		ray->hit_side = HORIZONTAL_HIT;
-	}
+		set_horizontal_hit(leet, ray, horizontal_hit, horz_hit_distance);
 }
 
-t_ray	cast_ray(t_main *main, double ray_angle)
+t_ray	cast_ray(t_leet *leet, double ray_angle)
 {
 	t_ray		ray;
 	t_vector	horizontal_hit;
 	t_vector	vertical_hit;
 
 	ray.angle = _angle(ray_angle);
-	horizontal_hit = horizontal_raycast(main, ray_angle);
-	vertical_hit = vertical_raycast(main, ray_angle);
-	setup_ray(main, &ray, horizontal_hit, vertical_hit);
+	horizontal_hit = horizontal_raycast(leet, ray_angle);
+	vertical_hit = vertical_raycast(leet, ray_angle);
+	setup_ray(leet, &ray, horizontal_hit, vertical_hit);
 	return (ray);
 }
 
-void	raycasting(t_main *main)
+void	raycasting(t_leet *leet)
 {
 	double	ray_angle;
 	int		i;
 
-	ray_angle = main->player.angle - (main->player.fov / 2);
-	main->player.rays = malloc(sizeof(t_ray) * NUM_RAYS);
-	if (!main->player.rays)
+	ray_angle = leet->ray.player.angle - (leet->ray.player.fov / 2);
+	leet->ray.player.rays = malloc(sizeof(t_ray) * NUM_RAYS);
+	if (!leet->ray.player.rays)
 		exit(1);
 	i = 0;
 	while (i < NUM_RAYS)
 	{
 		ray_angle = _angle(ray_angle);
-		main->player.rays[i] = cast_ray(main, ray_angle);
-		ray_angle += main->player.fov / NUM_RAYS;
+		leet->ray.player.rays[i] = cast_ray(leet, ray_angle);
+		ray_angle += leet->ray.player.fov / NUM_RAYS;
 		i++;
 	}
 }
